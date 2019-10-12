@@ -1,0 +1,3 @@
+---
+# defaults file for setup-yum-repositories
+dnf_mirror_fqdn: localhost.localdomain

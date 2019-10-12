@@ -1,0 +1,31 @@
+---
+# tasks file for setup-yum-repositories
+- name: Put DNF repositories
+  become: True
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0644
+    seuser: system_u
+    serole: object_r
+    setype: system_conf_t
+    selevel: s0
+  with_items:
+    - src: CentOS-Base.repo.j2
+      dest: /etc/yum.repos.d/CentOS-Base.repo
+    - src: CentOS-AppStream.repo.j2
+      dest: /etc/yum.repos.d/CentOS-AppStream.repo
+    - src: epel.repo.j2
+      dest: /etc/yum.repos.d/epel.repo
+  tags:
+    - setup-yum-repositories
+
+- name: Clear DNF cache
+  become: True
+  file:
+    path: /var/cache/dnf
+    state: absent
+  tags:
+    - setup-yum-repositories
